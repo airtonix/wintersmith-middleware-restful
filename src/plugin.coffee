@@ -1,5 +1,4 @@
-_ = require 'lodash
-'
+_ = require 'lodash'
 path = require 'path'
 restful = require 'restful'
 resourceful = require 'resourceful'
