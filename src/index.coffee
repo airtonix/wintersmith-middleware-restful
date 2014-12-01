@@ -10,7 +10,6 @@ module.exports = (env, done) ->
 	defaults =
 		router:
 			strict: true
-			# useBrowser: false
 
 	done() unless env.config.restful?
 
