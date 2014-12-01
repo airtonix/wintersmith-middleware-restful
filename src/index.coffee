@@ -15,29 +15,29 @@ module.exports = (env, done) ->
 	done() unless env.config.restful?
 
 	class RestfulMiddlewarePlugin extends env.MiddlewarePlugin
-
+		routers: []
 		constructor: ->
 			for group in env.config.restful
 				options = _.merge defaults, group or {}
 				env.logger.info '[middleware.RESTful]'.blue, options.prefix.green
 
 				resources = []
-				for name, resource of @getResources options.resources
+				modules = include_all
+					dirname: path.resolve options.resources
+					filter: /(.+)\.[coffee|js]/
+
+				for name, resource of modules
 					env.logger.info '[middleware.RESTful]'.blue, options.prefix.green, 'loading resource', name
 					resources.push resourceful.define name, resource
 
 				if resources.length
-					@router = restful.createRouter resources, options
-
-		getResources: (resource_path)->
-			resources = include_all
-				dirname: path.resolve resource_path
-			return resources
+					@routers.push restful.createRouter resources, options
 
 		dispatch: (request, response, next) ->
 			super request, response, next
-			if @router?
-				@router.dispatch request, response, next
+			for router in @routers
+				router.dispatch request, response, next
+
 
 	env.registerMiddlewarePlugin RestfulMiddlewarePlugin
 
