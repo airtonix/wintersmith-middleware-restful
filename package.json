@@ -4,7 +4,7 @@
   "description": "RESTful wintersmith middleware plugin",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --opts ./mocha.conf"
   },
   "repository": {
     "type": "git",
@@ -26,10 +26,17 @@
     "wintersmith": "^2.1.1"
   },
   "dependencies": {
-    "coffee-script": "^1.8.0",
     "include-all": "^0.1.6",
     "lodash": "^2.4.1",
     "resourceful": "^0.3.3",
     "restful": "^0.4.5"
+  },
+  "devDependencies": {
+    "cheerio": "^0.18.0",
+    "coffee-script": "^1.8.0",
+    "mocha": "^2.0.1",
+    "request": "^2.49.0",
+    "should": "^4.3.0",
+    "vows": "^0.8.1"
   }
 }
