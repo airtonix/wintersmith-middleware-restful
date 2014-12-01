@@ -10,33 +10,34 @@ module.exports = (env, done) ->
 	defaults =
 		router:
 			strict: true
-			prefix: '/api/'
+			# useBrowser: false
 
-	options = _.merge defaults, env.config.restful or {}
+	done() unless env.config.restful?
 
 	class RestfulMiddlewarePlugin extends env.MiddlewarePlugin
 
 		constructor: ->
-			resources = []
-			for name, resource of @resources
-				env.logger.info '[middleware.RESTful]'.blue, 'loading resource', name
-				resources.push resourceful.define name, resource
+			for group in env.config.restful
+				options = _.merge defaults, group or {}
+				env.logger.info '[middleware.RESTful]'.blue, options.prefix.green
 
-			@router = restful.createRouter resources, options.router?={}
-			return
+				resources = []
+				for name, resource of @getResources options.resources
+					env.logger.info '[middleware.RESTful]'.blue, options.prefix.green, 'loading resource', name
+					resources.push resourceful.define name, resource
 
-		@property 'resources', 'getResources'
-		getResources: ->
-			resource_path = path.resolve options.resources
+				if resources.length
+					@router = restful.createRouter resources, options
+
+		getResources: (resource_path)->
 			resources = include_all
-				dirname: resource_path
-				filter: /(.+)Resource.*/
-			env.logger.info '[middleware.RESTful]'.blue, 'Resources:', resources
+				dirname: path.resolve resource_path
 			return resources
 
 		dispatch: (request, response, next) ->
 			super request, response, next
-			@router.dispatch request, response, next
+			if @router?
+				@router.dispatch request, response, next
 
 	env.registerMiddlewarePlugin RestfulMiddlewarePlugin
 
