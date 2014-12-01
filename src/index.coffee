@@ -5,12 +5,14 @@ resourceful = require 'resourceful'
 include_all = require 'include-all'
 
 
-
 module.exports = (env, done) ->
 
-	options = env.config.restful
-	done('missing restful config') unless options?
+	defaults =
+		router:
+			strict: true
+			prefix: '/api/'
 
+	options = _.merge defaults, env.config.restful or {}
 
 	class RestfulMiddlewarePlugin extends env.MiddlewarePlugin
 
