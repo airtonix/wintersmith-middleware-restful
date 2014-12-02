@@ -1,0 +1,12 @@
+{
+  "port": 8000,
+  "contents": "./contents",
+  "templates": "./templates",
+  "plugins": [
+    "../"
+  ],
+  "restful": [{
+      "prefix": "api/v1",
+      "resources": "./resources"
+    }]
+}

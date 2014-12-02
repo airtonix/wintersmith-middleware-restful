@@ -1,4 +1,5 @@
 _ = require 'lodash'
+async = require 'async'
 path = require 'path'
 restful = require 'restful'
 resourceful = require 'resourceful'
@@ -21,8 +22,9 @@ module.exports = (env, done) ->
 				env.logger.info '[middleware.RESTful]'.blue, options.prefix.green
 
 				resources = []
+				module_paths = path.join env.workDir, options.resources
 				modules = include_all
-					dirname: path.resolve options.resources
+					dirname: module_paths
 					filter: /(.+)\.[coffee|js]/
 
 				for name, resource of modules
@@ -33,9 +35,11 @@ module.exports = (env, done) ->
 					@routers.push restful.createRouter resources, options
 
 		dispatch: (request, response, next) ->
-			super request, response, next
-			for router in @routers
-				router.dispatch request, response, next
+			async.waterfall @routers.map (router)->
+				(previous, next) ->
+					router.dispatch request, response, next
+			, (err, results) ->
+				next()
 
 
 	env.registerMiddlewarePlugin RestfulMiddlewarePlugin

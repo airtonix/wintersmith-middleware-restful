@@ -1,6 +1,5 @@
 --compilers coffee:coffee-script/register
---reporter list
+--reporter spec
 --ui bdd
 --watch
---timeout 3000
 --recursive

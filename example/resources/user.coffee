@@ -1,16 +1,16 @@
-resourceful = require 'resourceful'
-
-exports.User = ->
+module.exports = ->
 	@use 'memory'
 
-	@restful = true
-	@timestamps()
-	@number 'id'
+	# Fields
 	@bool 'active', default: false
-	@string 'username'
-	@string 'email', format: 'email', require: true
-	@string 'password'
+
 	@string 'first_name'
 	@string 'last_name'
+	# @string 'username',
+	# 	minimum: 8
+	# @string 'email',
+	# 	format: 'email'
+	# @string 'password'
 
+	@timestamps()
 
