@@ -39,8 +39,8 @@
     "coffee-script": "^1.8.0",
     "mocha": "^2.0.1",
     "request": "^2.49.0",
-    "shelljs": "^0.3.0",
+    "requestify": "^0.1.16",
     "should": "^4.3.0",
-    "vows": "^0.8.1"
+    "wintersmith": "^2.1.1"
   }
 }
